@@ -62,18 +62,3 @@ function goToExperiment(index) {
   descriptionText.innerText = experiment.description;
 }
 
-nextButton.addEventListener("click", () => {
-  currentExperiment++;
-  if (currentExperiment >= experiments.length) {
-    currentExperiment = 0;
-  }
-  goToExperiment(currentExperiment);
-});
-
-prevButton.addEventListener("click", () => {
-  currentExperiment--;
-  if (currentExperiment < 0) {
-    currentExperiment = experiments.length - 1;
-  }
-  goToExperiment(currentExperiment);
-});
