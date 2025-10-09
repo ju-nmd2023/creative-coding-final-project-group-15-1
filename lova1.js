@@ -1,44 +1,44 @@
-//The following lines of code is inspired by flow field art by Tyler Hobbs, https://www.tylerxhobbs.com/words/flow-fields
+let stepSize = 10;
+let lineLength = 150;
+let palette;
+let move = 0; // z-offset for evolving noise
+
 function setup() {
   createCanvas(innerWidth, innerHeight);
-  background(225, 235, 245);
+  background(240);
   noFill();
-  strokeWeight(3);
+  strokeWeight(1.2);
 
-  let stepSize = 80;
-  let lineLength = 300; // gör linjerna längre
   let palette = [
-    color(101, 67, 33), // dark brown
-    color(139, 69, 19), // saddle brown
-    color(160, 82, 45), // sienna
-    color(205, 133, 63), // peru
-    color(222, 184, 135), // burlywood
+    color(215, 70, 110, 40),
+    color(90, 20, 200, 40),
+    color(255, 100, 50, 40),
   ];
 
-  // Rita t.ex. 100 linjer från nedre mitten
-  for (let j = 0; j < stepSize; j++) {
-    stroke(palette[int(random(palette.length))]);
+  for (let x = 0; x < width; x += stepSize) {
+    for (let y = 0; y < height; y += stepSize) {
+      stroke(palette[int(random(palette.length))]);
 
-    let px = width / 2 + random(-30, 30);
-    let py = height;
+      let px = x;
+      let py = y;
 
-    beginShape();
-    for (let i = 10; i < lineLength; i++) {
-      vertex(px, py);
+      beginShape();
+      for (let i = 0; i < lineLength; i++) {
+        vertex(px, py);
 
-      // Perlin noise flow field
-      let n = noise(px * 0.01, py * 0.01, j * 0.05); // tredje dimension för variation
-      let angle = -HALF_PI + map(n, 0, 1, -PI / 6, PI / 6);
-      let flowAmount = map(i, 0, lineLength, 0.3, 1.2); // increases toward top
-      angle += sin(n * TWO_PI * 0.02) * 1.4 * flowAmount;
+        // Add zoff to evolve the noise field over time
+        let n = noise(px * 0.002, py * 0.002, move);
+        let angle = TAU * n;
 
-      px += cos(angle) * 2;
-      py += sin(angle) * 2;
+        px += cos(angle) * 2;
+        py += sin(angle) * 2;
 
-      if (px < 0 || px > width || py < 0 || py > height) break;
+        if (px < 0 || px > width || py < 0 || py > height) break;
+      }
+      endShape();
     }
-    endShape();
   }
 
-  noLoop();
+  // Slowly change zoff so the field “flows”
+  move += 0.009;
 }
