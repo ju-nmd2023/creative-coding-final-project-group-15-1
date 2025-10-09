@@ -1,6 +1,7 @@
 let stepSize = 20;
 let lineLength = 150;
 let palette;
+
 let starss = [];
 let cols, rows;
 let bgGraphics; 
@@ -25,6 +26,9 @@ function setup() {
     color(10, 32, 90, 100),
   ];
 
+// Flowfield part of the code is inspired by Tyler Hobbs: 
+// https://www.tylerxhobbs.com/words/flow-fields
+
   //Draw static flow field background 
   for (let x = 0; x < width; x += stepSize) {
     for (let y = 0; y < height; y += stepSize) {
@@ -48,6 +52,9 @@ function setup() {
       bgGraphics.endShape();
     }
   }
+
+  // The following lines of code (until row 102) is inspired by Garitt's snow demo 
+  // given during the course Foundations of Programming, spring 2024.
 
   // Create stars (small stars with fixed positions)
   cols = floor(width / (stepSize * 2)); 
@@ -94,7 +101,7 @@ function draw() {
     pop();
   }
 
-  //Draw yellow stars on click 
+  //Yellow stars on click 
   for (let s of clickedStars) {
     drawClickedStar(s);
   }
@@ -105,6 +112,7 @@ function drawClickedStar(s) {
   strokeWeight(2);
   noFill();
 
+   //following 13 lines for making proper star-shapes is inspired by discussion with ChatGPT (OpenAI, 2025)
   const angleStep = TWO_PI / 5; 
   beginShape();
   for (let i = 0; i < 5; i++) {
