@@ -1,11 +1,11 @@
-let stepSize = 20;
+let stepSize = 15;
 let lineLength = 150;
 let palette;
 
 let starss = [];
 let cols, rows;
-let bgGraphics; 
-let clickedStars = []; 
+let bgGraphics;
+let clickedStars = [];
 
 function setup() {
   createCanvas(innerWidth, innerHeight);
@@ -18,7 +18,7 @@ function setup() {
   bgGraphics.noFill();
   bgGraphics.strokeWeight(0.5);
 
-  //Flow field color palette 
+  //Flow field color palette
   palette = [
     color(255, 255, 255, 80),
     color(157, 165, 189, 100),
@@ -26,10 +26,10 @@ function setup() {
     color(10, 32, 90, 100),
   ];
 
-// Flowfield part of the code is inspired by Tyler Hobbs: 
-// https://www.tylerxhobbs.com/words/flow-fields
+  // Flowfield part of the code is inspired by Tyler Hobbs:
+  // https://www.tylerxhobbs.com/words/flow-fields
 
-  //Draw static flow field background 
+  //Draw static flow field background
   for (let x = 0; x < width; x += stepSize) {
     for (let y = 0; y < height; y += stepSize) {
       bgGraphics.stroke(palette[int(random(palette.length))]);
@@ -53,12 +53,12 @@ function setup() {
     }
   }
 
-  // The following lines of code (until row 102) is inspired by Garitt's snow demo 
+  // The following lines of code (until row 102) is inspired by Garitt's snow demo
   // given during the course Foundations of Programming, spring 2024.
 
   // Create stars (small stars with fixed positions)
-  cols = floor(width / (stepSize * 2)); 
-  rows = floor(height / (stepSize * 2));
+  cols = floor(width / stepSize);
+  rows = floor(height / stepSize);
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -101,7 +101,7 @@ function draw() {
     pop();
   }
 
-  //Yellow stars on click 
+  //Yellow stars on click
   for (let s of clickedStars) {
     drawClickedStar(s);
   }
@@ -112,16 +112,16 @@ function drawClickedStar(s) {
   strokeWeight(2);
   noFill();
 
-   //following 13 lines for making proper star-shapes is inspired by discussion with ChatGPT (OpenAI, 2025)
-  const angleStep = TWO_PI / 5; 
+  //following 13 lines for making proper star-shapes is inspired by discussion with ChatGPT (OpenAI, 2025)
+  const angleStep = TWO_PI / 5;
   beginShape();
   for (let i = 0; i < 5; i++) {
-    let x1 = s.x + cos(i * angleStep) * s.size / 2;
-    let y1 = s.y + sin(i * angleStep) * s.size / 2;
+    let x1 = s.x + (cos(i * angleStep) * s.size) / 2;
+    let y1 = s.y + (sin(i * angleStep) * s.size) / 2;
     vertex(x1, y1);
 
-    let x2 = s.x + cos(i * angleStep + angleStep / 2) * s.size / 4;
-    let y2 = s.y + sin(i * angleStep + angleStep / 2) * s.size / 4;
+    let x2 = s.x + (cos(i * angleStep + angleStep / 2) * s.size) / 4;
+    let y2 = s.y + (sin(i * angleStep + angleStep / 2) * s.size) / 4;
     vertex(x2, y2);
   }
   endShape(CLOSE);
@@ -133,5 +133,21 @@ function mousePressed() {
     x: mouseX,
     y: mouseY,
     size: random(30, 60),
+  });
+
+  console.log("Mouse pressed!");
+
+  Tone.start().then(() => {
+    console.log("AudioContext started!");
+
+    const lowpass = new Tone.Filter(100, "lowpass").toDestination();
+    const highpass = new Tone.Filter(250, "highpass").connect(lowpass);
+
+    const osc = new Tone.Oscillator(Math.random() * 880 + 110, "sine").connect(
+      highpass
+    );
+
+    osc.start();
+    osc.stop("+0.8");
   });
 }
