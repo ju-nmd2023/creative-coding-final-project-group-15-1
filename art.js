@@ -1,4 +1,4 @@
-let stepSize = 15;
+let stepSize = 14;
 let lineLength = 150;
 let palette;
 
