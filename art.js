@@ -80,7 +80,7 @@ function draw() {
   //Draw the fixed stars
   noStroke();
   for (let stars of starss) {
-    let pulse = 1 + 0.3 * sin(frameCount * stars.pulseSpeed + stars.offset);
+    let pulse = 0.5 + 1 * sin(frameCount * stars.pulseSpeed + stars.offset);
     let brightness =
       180 + 75 * sin(frameCount * stars.pulseSpeed + stars.offset);
     fill(255, 255, 255, brightness * stars.alpha);
